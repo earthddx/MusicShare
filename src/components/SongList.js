@@ -73,7 +73,7 @@ export default function SongList() {
     }
 
     return (
-      <Card className={classes.container}>
+      <Card className={classes.container} >
         <div className={classes.songInfoContainer}>
           <CardMedia className={classes.thumbnail} image={thumbnail} />
           <div className={classes.songInfo}>

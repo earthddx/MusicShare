@@ -135,7 +135,8 @@ export default function SongPlayer() {
               <SkipNext />
             </IconButton>
             <Typography variant="subtitle1" component="p" color="textSecondary">
-              {formatDuration(playedSeconds)}
+            {formatDuration(playedSeconds)}
+            {` / `}{formatDuration(state.song.duration)}
             </Typography>
           </div>
           <Slider
