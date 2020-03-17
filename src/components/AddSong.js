@@ -1,19 +1,19 @@
-import React, { useState, useEffect} from "react";
-import { useMutation } from '@apollo/react-hooks';
+import React from "react";
 import {
   TextField,
   InputAdornment,
   Button,
-  DialogContent,
   Dialog,
   DialogTitle,
+  DialogContent,
   DialogActions,
   makeStyles
 } from "@material-ui/core";
 import { Link, AddBoxOutlined } from "@material-ui/icons";
+import ReactPlayer from "react-player";
 import SoundcloudPlayer from "react-player/lib/players/SoundCloud";
 import YoutubePlayer from "react-player/lib/players/YouTube";
-import ReactPlayer from "react-player";
+import { useMutation } from "@apollo/react-hooks";
 import { ADD_SONG } from "../graphql/mutations";
 
 const useStyles = makeStyles(theme => ({
@@ -40,17 +40,17 @@ const DEFAULT_SONG = {
   title: "",
   artist: "",
   thumbnail: ""
-}
+};
 
-export default function AddSong() {
+function AddSong() {
   const classes = useStyles();
   const [addSong, { error }] = useMutation(ADD_SONG);
-  const [url, setUrl] = useState("");
-  const [playable, setPlayable] = useState(false);
-  const [dialog, setDialog] = useState(false);
-  const [song, setSong] = useState(DEFAULT_SONG);
+  const [url, setUrl] = React.useState("");
+  const [playable, setPlayable] = React.useState(false);
+  const [dialog, setDialog] = React.useState(false);
+  const [song, setSong] = React.useState(DEFAULT_SONG);
 
-  useEffect(() => {
+  React.useEffect(() => {
     const isPlayable =
       SoundcloudPlayer.canPlay(url) || YoutubePlayer.canPlay(url);
     setPlayable(isPlayable);
@@ -64,7 +64,7 @@ export default function AddSong() {
     }));
   }
 
-  function handleSetDialog() {
+  function handleCloseDialog() {
     setDialog(false);
   }
 
@@ -91,11 +91,11 @@ export default function AddSong() {
           artist: artist.length > 0 ? artist : null
         }
       });
-      handleSetDialog()
-      setSong(DEFAULT_SONG)
-      setUrl('')
+      handleCloseDialog();
+      setSong(DEFAULT_SONG);
+      setUrl("");
     } catch (error) {
-      console.error("Error adding song", error)
+      console.error("Error adding song", error);
     }
   }
 
@@ -126,25 +126,25 @@ export default function AddSong() {
     });
   }
 
-function handleInputError(field){
-  return error && error.graphQLErrors[0].extensions.path.includes(field)//only if theres an error
-}
+  function handleError(field) {
+    return error && error.networkError.extensions.path.includes(field);
+  }
 
   const { thumbnail, title, artist } = song;
-
+  console.dir(error)
   return (
     <div className={classes.container}>
       <Dialog
         className={classes.dialog}
         open={dialog}
-        onClose={handleSetDialog}
+        onClose={handleCloseDialog}
       >
         <DialogTitle>Edit Song</DialogTitle>
         <DialogContent>
           <img
-            className={classes.thumbnail}
             src={thumbnail}
             alt="Song thumbnail"
+            className={classes.thumbnail}
           />
           <TextField
             value={title}
@@ -153,8 +153,8 @@ function handleInputError(field){
             name="title"
             label="Title"
             fullWidth
-            error={handleInputError('title')}//check if theres an error (empy string)
-            helperText={handleInputError('title') && 'Fill out field'}
+            error={handleError("title")}
+            helperText={handleError("title") && "Fill out field"}
           />
           <TextField
             value={artist}
@@ -163,8 +163,8 @@ function handleInputError(field){
             name="artist"
             label="Artist"
             fullWidth
-            error={handleInputError('artist')}
-            helperText={handleInputError('artist') && 'Fill out field'}
+            error={handleError("artist")}
+            helperText={handleError("artist") && "Fill out field"}
           />
           <TextField
             value={thumbnail}
@@ -173,15 +173,15 @@ function handleInputError(field){
             name="thumbnail"
             label="Thumbnail"
             fullWidth
-            error={handleInputError('thumbnail')}
-            helperText={handleInputError('thumbnail') && 'Fill out field'}
+            error={handleError("thumbnail")}
+            helperText={handleError("thumbnail") && "Fill out field"}
           />
         </DialogContent>
         <DialogActions>
-          <Button color="secondary" onClick={handleSetDialog}>
+          <Button onClick={handleCloseDialog} color="secondary">
             Cancel
           </Button>
-          <Button onClick={handleAddSong} color="primary" variant="outlined">
+          <Button onClick={handleAddSong} variant="outlined" color="primary">
             Add Song
           </Button>
         </DialogActions>
@@ -190,7 +190,7 @@ function handleInputError(field){
         className={classes.urlInput}
         onChange={event => setUrl(event.target.value)}
         value={url}
-        placeholder="Add YouTube or SoundCloud Url"
+        placeholder="Add Youtube or Soundcloud Url"
         fullWidth
         margin="normal"
         type="url"
@@ -212,7 +212,9 @@ function handleInputError(field){
       >
         Add
       </Button>
-      <ReactPlayer url={url} hidden={true} onReady={handleEditSong} />
+      <ReactPlayer url={url} hidden onReady={handleEditSong} />
     </div>
   );
 }
+
+export default AddSong;
