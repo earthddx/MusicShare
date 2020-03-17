@@ -28,7 +28,7 @@ function App() {
     <SongContext.Provider value={{state, dispatch}}>
       { greaterThanSm && <Header />}
       <Grid container spacing={3}>
-        <Grid style={{ paddingTop: greaterThanSm ? 80 : 10}} item xs={12} md={7}>
+        <Grid style={{ paddingTop: greaterThanSm ? 80 : 10, marginBottom: 190}} item xs={12} md={7}>
           <AddSong />
           <SongList />
         </Grid>
