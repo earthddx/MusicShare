@@ -1,24 +1,26 @@
-export default function songReducer(state, action) {
+const songReducer = (state, action) => {
   switch (action.type) {
     case "PLAY_SONG": {
       return {
         ...state,
-        isPlaying: true
+        isPlaying: true,
       };
     }
     case "PAUSE_SONG": {
       return {
         ...state,
-        isPlaying: false
+        isPlaying: false,
       };
     }
     case "SET_SONG": {
-      return{
-         ...state,
-         song: action.payload.song
-      } 
+      return {
+        ...state,
+        song: action.payload.song,
+      };
     }
     default:
       return state;
   }
-}
+};
+
+export default songReducer;

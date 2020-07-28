@@ -1,54 +1,62 @@
-import React, {createContext, useContext, useReducer} from "react";
-import Header from "./components/Header";
-import AddSong from "./components/AddSong";
-import SongList from "./components/SongList";
-import SongPlayer from "./components/SongPlayer";
+import React, { createContext, useContext, useReducer } from "react";
 import { Grid, useMediaQuery } from "@material-ui/core";
-import songReducer from './reducer'
+import { useQuery } from "@apollo/react-hooks";
+
+import Header from "./components/Header";
+import SongList from "./components/SongList";
+import QueudSongList from "./components/QueuedSongList";
+import songReducer from "./reducer";
+import { GET_QUEUED_SONGS } from "./graphql/queries";
 
 export const SongContext = createContext({
   song: {
-    id: "f8b52ae9-ebe9-4e73-a077-c875b86d8f4e",
-    title: "Toxicity",
-    artist: "System Of A Down",
-    thumbnail: "http://img.youtube.com/vi/iywaBOMvYLI/0.jpg",
-    url: "https://www.youtube.com/watch?v=iywaBOMvYLI",
-    duration: 224
+    artist: "",
+    title: "",
+    duration: 0,
+    id: "",
+    thumbnail: "",
+    url: "",
   },
-  isPlaying: false
-})
+  isPlaying: false,
+});
 
 function App() {
-  const initialSongState = useContext(SongContext)
-  const [state, dispatch] = useReducer(songReducer, initialSongState)
-  const greaterThanMd = useMediaQuery(theme => theme.breakpoints.up("md"));
-  const greaterThanSm = useMediaQuery(theme => theme.breakpoints.up("sm"));
+  const { data } = useQuery(GET_QUEUED_SONGS);
+  const context = useContext(SongContext);
+  const [state, dispatch] = useReducer(songReducer, context);
+  const greaterThanMd = useMediaQuery((theme) => theme.breakpoints.up("md"));
 
   return (
-    <SongContext.Provider value={{state, dispatch}}>
-      { greaterThanSm && <Header />}
-      <Grid container spacing={3}>
-        <Grid style={{ paddingTop: greaterThanSm ? 80 : 10, marginBottom: greaterThanMd ? 0 : 190}} item xs={12} md={8}>
-          <AddSong />
-          <SongList />
-        </Grid>
-        <Grid   
+    //TODO: Finish responsive design
+    <SongContext.Provider value={{ state, dispatch }}>
+      <Header />
+      <Grid container>
+        {greaterThanMd && (
+          <Grid
+            item
+            md={3}
+            style={{
+              paddingTop: 80,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <QueudSongList queue={data.queue} />
+          </Grid>
+        )}
+        <Grid
           item
           xs={12}
-          md={4}
-          style={
-            greaterThanMd
-              ? { position: "fixed", width: "100%", right: 0, top: 70 }
-              : {
-                  position: "fixed",
-                  left: "0",
-                  bottom: "0",
-                  width: "100%"
-                }
-          }
+          sm={12}
+          md={6}
+          style={{
+            paddingTop: 100,
+
+          }}
         >
-          <SongPlayer />
+          <SongList queue={data.queue} />
         </Grid>
+        <Grid item md={3} />
       </Grid>
     </SongContext.Provider>
   );

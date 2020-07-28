@@ -1,111 +1,17 @@
-import React, { useState, useContext, useEffect } from "react";
-import {
-  CircularProgress,
-  CardContent,
-  Typography,
-  Card,
-  CardMedia,
-  IconButton,
-  CardActions,
-  makeStyles
-} from "@material-ui/core";
-import { Save, PlayArrow, Pause } from "@material-ui/icons";
+import React from "react";
+import { Grid, CircularProgress } from "@material-ui/core";
+
 import { useSubscription, useMutation } from "@apollo/react-hooks";
+
 import { GET_SONGS } from "../graphql/subscriptions";
-import { SongContext } from "../App";
-import { ADD_OR_REMOVE_FROM_QUEUE } from '../graphql/mutations'
+import { DELETE_SONG } from "../graphql/mutations";
 
-export default function SongList() {
+import Song from "./Song";
+
+
+export default function SongList({ queue }) {
   const { data, loading, error } = useSubscription(GET_SONGS);
-
-  // const song = {
-  //   title: "Calima",
-  //   artist: "Jonas Saalbach",
-  //   thumbnail: "https://i1.sndcdn.com/artworks-000491934594-vdelh2-t500x500.jpg"
-  // };
-
-  const useStyles = makeStyles(theme => ({
-    container: {
-      margin: theme.spacing(1)
-    },
-    songInfoContainer: {
-      display: "flex",
-      alignItems: "center"
-    },
-    songInfo: {
-      width: "100%",
-      display: "flex",
-      justifyContent: "space-between"
-    },
-    thumbnail: {
-      objectFit: "cover",
-      width: 140,
-      height: 140
-    }
-  }));
-  function Song({ song }) {
-    const { thumbnail, title, artist } = song;
-    const { state, dispatch } = useContext(SongContext);
-    const [currentSongPlaying, setCurrentSongPlaying] = useState(false);
-    const [addOrRemoveFromQueue] = useMutation(ADD_OR_REMOVE_FROM_QUEUE, {
-      onCompleted: data => { //save data to local storage so the queue is persistent
-        localStorage.setItem('queue', JSON.stringify(data.addOrRemoveFromQueue))
-      }
-    });
-    const classes = useStyles();
-
-    useEffect(() => {
-      const isThisSongPlaying = state.isPlaying && song.id === state.song.id;
-      setCurrentSongPlaying(isThisSongPlaying);
-    }, [song.id, state.song.id, state.isPlaying]);
-
-    function handleTogglePlay() {
-      dispatch({ type: "SET_SONG", payload: { song } });
-      dispatch(
-        state.isPlaying ? { type: "PAUSE_SONG" } : { type: "PLAY_SONG" }
-      );
-    }
-
-    function handleAddOrRemoveFromQueue() {
-      addOrRemoveFromQueue({
-        variables: { input: { ...song, __typename: "Song"}}
-      });
-    }
-
-    return (
-      <Card className={classes.container} >
-        <div className={classes.songInfoContainer}>
-          <CardMedia className={classes.thumbnail} image={thumbnail} />
-          <div className={classes.songInfo}>
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-                {title}
-              </Typography>
-              <Typography variant="body1" component="p" color="textSecondary">
-                {artist}
-              </Typography>
-            </CardContent>
-            <CardActions>
-              <IconButton
-                onClick={handleTogglePlay}
-                size="small"
-                color="primary"
-              >
-                {currentSongPlaying ? <Pause /> : <PlayArrow />}
-              </IconButton>
-              <IconButton
-                onClick={handleAddOrRemoveFromQueue}
-                size="small"
-                color="secondary"
-              >
-                <Save />
-              </IconButton>
-            </CardActions>
-          </div>
-        </div>
-      </Card>
-    );
-  }
+  const [deleteSong] = useMutation(DELETE_SONG);
 
   if (loading) {
     return (
@@ -114,19 +20,125 @@ export default function SongList() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          marginTop: "50"
+          marginTop: 250,
         }}
       >
-        <CircularProgress />
+        <CircularProgress size="10rem" />
       </div>
     );
   }
-  if (error) return <div>Error fetching songs</div>;
+
+  if (error) {
+    return <div>Error fetching songs </div>;
+  }
+
+  const handleDeleteSong = (id) => {
+    if (window.confirm("⚠️ Are you sure you want to delete song?")) {
+      deleteSong({
+        variables: { id },
+      });
+    }
+  };
+
   return (
     <div>
-      {data.songs.map(song => (
-        <Song key={song.id} song={song} />
-      ))}
+      <Grid container spacing={0}>
+        {data.songs.map((song) => (
+          <Grid item md={4} key={song.id}>
+            <Song
+              song={song}
+              handleDeleteSong={handleDeleteSong}
+              queue={queue}
+            />
+          </Grid>
+        ))}
+      </Grid>
     </div>
   );
+
+  // function Song({ song }) {
+  //   const { artist, title, thumbnail } = song;
+  //   const { state, dispatch } = useContext(SongContext);
+  //   const [currSongPlaying, setCurrSongPlaying] = useState(false);
+  //   const [currSongInQueue, setCurrSongInQueue] = useState(false);
+  //   const [addOrRemoveFromQueue] = useMutation(ADD_OR_REMOVE_SONG_FROM_QUEUE, {
+  //     onCompleted: (data) => {
+  //       localStorage.setItem(
+  //         "queue",
+  //         JSON.stringify(data.addOrRemoveFromQueue)
+  //       );
+  //     },
+  //   });
+
+  //   useEffect(() => {
+  //     const isSongPlaying = state.isPlaying && song.id === state.song.id;
+  //     setCurrSongPlaying(isSongPlaying);
+  //     const isSongInQueue = queue.some((item) => item.id === song.id);
+  //     setCurrSongInQueue(isSongInQueue);
+  //   }, [song.id, state.song.id, state.isPlaying]);
+
+  //   const handleTogglePlay = () => {
+  //     dispatch({ type: "SET_SONG", payload: { song } });
+  //     dispatch(
+  //       state.isPlaying ? { type: "PAUSE_SONG" } : { type: "PLAY_SONG" }
+  //     );
+  //   };
+
+  //   const handleAddToQueue = () => {
+  //     addOrRemoveFromQueue({
+  //       variables: { input: { ...song, __typename: "Song" } },
+  //     });
+  //   };
+
+  //   return (
+  //     <Card className={classes.container}>
+  //       <div className={classes.songInfoContainer}>
+  //         <div className={classes.deleteSong}>
+  //           <Tooltip title="Delete song">
+  //             <IconButton onClick={() => handleDeleteSong(song.id)}>
+  //               <Cancel style={{ fontSize: 30 }} color="primary" />
+  //             </IconButton>
+  //           </Tooltip>
+  //         </div>
+  //         <CardMedia image={thumbnail} className={classes.thumbnail} />
+  //         <div className={classes.songInfo}>
+  //           <CardContent className={classes.typography}>
+  //             <Typography gutterBottom variant="body1" component="h6">
+  //               {title}
+  //             </Typography>
+  //             <Typography variant="body1" component="h6" color="textSecondary">
+  //               {artist}
+  //             </Typography>
+  //           </CardContent>
+  //           <CardActions>
+  //             <IconButton
+  //               size="small"
+  //               color="primary"
+  //               onClick={handleTogglePlay}
+  //             >
+  //               {currSongPlaying ? <Pause /> : <PlayArrow />}
+  //             </IconButton>
+  //             <Tooltip title={currSongInQueue ? "Added" : "Add to queue"}>
+  //               <span>
+  //                 {currSongInQueue ? (
+  //                   <IconButton size="small" color="secondary" disabled>
+  //                     <Check />
+  //                   </IconButton>
+  //                 ) : (
+  //                   <IconButton
+  //                     size="small"
+  //                     color="secondary"
+  //                     onClick={handleAddToQueue}
+  //                   >
+  //                     <Queue />
+  //                   </IconButton>
+  //                 )}
+  //               </span>
+  //             </Tooltip>
+  //           </CardActions>
+  //         </div>
+  //       </div>
+  //     </Card>
+  //   );
+  // }
 }

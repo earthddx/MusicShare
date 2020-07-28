@@ -1,47 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Typography,
+  Card,
+  CardContent,
+  CardActions,
   Avatar,
+  Collapse,
   IconButton,
+  Tooltip,
   makeStyles,
-  useMediaQuery
 } from "@material-ui/core";
-import { Delete } from "@material-ui/icons";
+import clsx from "clsx";
+import { Cancel, ExpandMore, QueueMusic } from "@material-ui/icons/";
 import { useMutation } from "@apollo/react-hooks";
-import { ADD_OR_REMOVE_FROM_QUEUE } from "../graphql/mutations";
 
-function QueuedSongList({ queue }) {
-  console.log({ queue });
-  const greaterThanMd = useMediaQuery(theme => theme.breakpoints.up("md"));
+import { ADD_OR_REMOVE_SONG_FROM_QUEUE } from "../graphql/mutations";
 
-  // const song = {
-  //   title: "Calima",
-  //   artist: "Jonas Ssalbach",
-  //   thumbnail: "https://i1.sndcdn.com/artworks-000491934594-vdelh2-t500x500.jpg"
-  // };
+//TODO: Display current playing song in the queue
 
-  return (
-    greaterThanMd && (
-      <div style={{ margin: "10px 0" }}>
-        <Typography color="textSecondary" variant="button">
-          QUEUE({queue.length})
-        </Typography>
-        {queue.map((song, i) => (
-          <QueuedSong key={i} song={song} />
-        ))}
-      </div>
-    )
-  );
-}
+const useStyles = makeStyles((theme) => ({
+  queuedSongList: {
+    //position: "fixed",
+    margin: " 0 auto",
 
-const useStyles = makeStyles({
+  },
   avatar: {
     width: 44,
-    height: 44
+    height: 44,
   },
   text: {
     textOverflow: "ellipsis",
-    overflow: "hidden"
+    overflow: "hidden",
   },
   container: {
     display: "grid",
@@ -49,52 +38,120 @@ const useStyles = makeStyles({
     gridTemplateColumns: "50px auto 50px",
     gridGap: 12,
     alignItems: "center",
-    marginTop: 10
+    marginTop: 10,
   },
   songInfoContainer: {
     overflow: "hidden",
-    whiteSpace: "nowrap"
-  }
-});
+    whiteSpace: "no-wrap",
+  },
+
+  root: {
+    maxWidth: 275,
+    minWidth: 275,
+  },
+  expand: {
+    transform: "rotate(0deg)",
+    marginLeft: "auto",
+    transition: theme.transitions.create("transform", {
+      duration: theme.transitions.duration.shortest,
+    }),
+  },
+  expandOpen: {
+    transform: "rotate(180deg)",
+  },
+}));
+
+export default function QueuedSongList({ queue }) {
+  const classes = useStyles();
+  const [expanded, setExpanded] = useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
+
+  return (
+    queue.length > 0 && (
+      <div className={classes.queuedSongList}>
+        <div className={classes.root}>
+          <CardActions disableSpacing>
+            <Typography color="textPrimary">
+              {expanded ? (
+                <span style={{ fontWeight: 100 }}>
+                  {queue.length} queued {queue.length === 1 ? "song" : "songs"}
+                </span>
+              ) : (
+                <span style={{ fontWeight: 100 }}>
+                  <Tooltip title="Queue">
+                    <QueueMusic style={{ fontSize: 34 }} />
+                  </Tooltip>
+                </span>
+              )}
+            </Typography>
+            <IconButton
+              className={clsx(classes.expand, {
+                [classes.expandOpen]: expanded,
+              })}
+              onClick={handleExpandClick}
+              aria-expanded={expanded}
+              aria-label="show more"
+            >
+              <ExpandMore />
+            </IconButton>
+          </CardActions>
+
+          <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <Card>
+              <CardContent>
+                {queue.map((song, i) => (
+                  <QueuedSong key={i} song={song} />
+                ))}
+              </CardContent>
+            </Card>
+          </Collapse>
+        </div>
+      </div>
+    )
+  );
+}
 
 function QueuedSong({ song }) {
   const classes = useStyles();
-  const [addOrRemoveFromQueue] =  useMutation(ADD_OR_REMOVE_FROM_QUEUE, {
-    onCompleted: data => { //save data to local storage so the queue is persistent (delete here)
-      localStorage.setItem('queue', JSON.stringify(data.addOrRemoveFromQueue))
-    }
-  })
   const { thumbnail, artist, title } = song;
+  const [addOrRemoveFromQueue] = useMutation(ADD_OR_REMOVE_SONG_FROM_QUEUE, {
+    onCompleted: (data) => {
+      localStorage.setItem("queue", JSON.stringify(data.addOrRemoveFromQueue));
+    },
+  });
 
-  function handleAddOrRemoveFromQueue() {
+  const handleRemoveFromQueue = () => {
     addOrRemoveFromQueue({
-      variables: { input: { ...song, __typename: "Song"}}
+      variables: { input: { ...song, __typename: "Song" } },
     });
-  }
+  };
 
   return (
     <div className={classes.container}>
-      <Avatar className={classes.avatar} src={thumbnail} alt="Song thumnail" />
+      <Avatar
+        variant="square"
+        src={thumbnail}
+        alt="song thumbnail"
+        className={classes.avatar}
+      />
       <div className={classes.songInfoContainer}>
-        <Typography className={classes.text} variant="subtitle2">
+        <Typography variant="subtitle2" className={classes.text}>
           {title}
         </Typography>
         <Typography
-          className={classes.text}
-          color="textSecondary"
           variant="body2"
+          color="textSecondary"
+          className={classes.text}
         >
           {artist}
         </Typography>
       </div>
-      <IconButton onClick={handleAddOrRemoveFromQueue}>
-        <Delete color="error" />
+      <IconButton onClick={handleRemoveFromQueue}>
+        <Cancel color="primary" />
       </IconButton>
     </div>
   );
 }
-
-
-
-
-export default QueuedSongList;
