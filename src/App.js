@@ -27,7 +27,6 @@ function App() {
   const greaterThanMd = useMediaQuery((theme) => theme.breakpoints.up("md"));
 
   return (
-    //TODO: Finish responsive design
     <SongContext.Provider value={{ state, dispatch }}>
       <Header />
       <Grid container>

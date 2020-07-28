@@ -68,7 +68,6 @@ export default function AddSong() {
     };
   };
 
-
   return (
     <div className={classes.container}>
       <AddSongDialog
@@ -79,8 +78,6 @@ export default function AddSong() {
         song={song}
         setSong={setSong}
       />
-
-      {/*Navbar Input */}
       <TextField
         fullWidth
         margin="normal"

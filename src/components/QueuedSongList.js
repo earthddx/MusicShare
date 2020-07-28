@@ -16,13 +16,9 @@ import { useMutation } from "@apollo/react-hooks";
 
 import { ADD_OR_REMOVE_SONG_FROM_QUEUE } from "../graphql/mutations";
 
-//TODO: Display current playing song in the queue
-
 const useStyles = makeStyles((theme) => ({
   queuedSongList: {
-    //position: "fixed",
     margin: " 0 auto",
-
   },
   avatar: {
     width: 44,

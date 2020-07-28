@@ -22,7 +22,6 @@ import { GET_QUEUED_SONGS } from "../graphql/queries";
 
 
 const useStyles = makeStyles((theme) => ({
-  //TODO: Finish stylings (instead of inline)
   songPlayer: {},
 }));
 
