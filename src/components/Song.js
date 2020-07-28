@@ -75,7 +75,7 @@ export default function Song({ song, handleDeleteSong, queue }) {
     setCurrSongPlaying(isSongPlaying);
     const isSongInQueue = queue.some((item) => item.id === song.id);
     setCurrSongInQueue(isSongInQueue);
-  }, [song.id, state.song.id, state.isPlaying]);
+  }, [song.id, state.song.id, state.isPlaying, queue]);
 
   const handleTogglePlay = () => {
     dispatch({ type: "SET_SONG", payload: { song } });
