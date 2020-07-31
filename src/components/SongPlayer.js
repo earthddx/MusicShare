@@ -194,7 +194,11 @@ export default function SongPlayer() {
               style={{
                 width: "20vw",
                 height: "11.5vw",
+<<<<<<< HEAD
                 pointerEvents: "none",
+=======
+                pointerEvents:'none'
+>>>>>>> 4a7a25df8bf2787d882b7a2eb6a17cfdc1c2e0c7
               }}
             >
               <ReactPlayer
