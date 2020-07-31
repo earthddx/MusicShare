@@ -19,8 +19,6 @@ import { useQuery } from "@apollo/react-hooks";
 import { SongContext } from "../App";
 import { GET_QUEUED_SONGS } from "../graphql/queries";
 
-
-
 const useStyles = makeStyles((theme) => ({
   songPlayer: {},
 }));
@@ -99,7 +97,6 @@ export default function SongPlayer() {
     setVolume(newValue);
   };
 
-
   return (
     state.song.title &&
     state.song.artist && (
@@ -107,31 +104,35 @@ export default function SongPlayer() {
         <div>
           <div style={{ display: "flex", alignItems: "center" }}>
             <div>
-              <Typography variant="body1" component="h3" color="primary">
-                <div
-                  style={{
-                    whiteSpace: "nowrap",
-                    width: 100,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    fontWeight: 600,
-                  }}
-                >
-                  {state.song.title}
-                </div>
-              </Typography>
-              <Typography variant="body1" component="h3">
-                <div
-                  style={{
-                    whiteSpace: "nowrap",
-                    width: 100,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                >
-                  {state.song.artist}
-                </div>
-              </Typography>
+              <Tooltip title={state.song.title}>
+                <Typography variant="body1" component="h3" color="primary">
+                  <div
+                    style={{
+                      whiteSpace: "nowrap",
+                      width: 100,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {state.song.title}
+                  </div>
+                </Typography>
+              </Tooltip>
+              <Tooltip title={state.song.artist}>
+                <Typography variant="body1" component="h3">
+                  <div
+                    style={{
+                      whiteSpace: "nowrap",
+                      width: 100,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    {state.song.artist}
+                  </div>
+                </Typography>
+              </Tooltip>
             </div>
             <div style={{ display: "flex", alignItems: "center" }}>
               <div>
@@ -193,12 +194,14 @@ export default function SongPlayer() {
               style={{
                 width: "20vw",
                 height: "11.5vw",
+                pointerEvents: "none",
               }}
             >
               <ReactPlayer
                 width="100%"
                 height="100%"
                 //controls={true}
+                loop={true}
                 url={state.song.url}
                 playing={state.isPlaying}
                 volume={volume}

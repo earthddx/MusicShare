@@ -101,12 +101,16 @@ export default function Song({ song, handleDeleteSong, queue }) {
         <CardMedia image={thumbnail} className={classes.thumbnail} />
         <div className={classes.songInfo}>
           <CardContent className={classes.typography}>
-            <Typography gutterBottom variant="body1" component="h6">
-              {title}
-            </Typography>
+            <Tooltip title={title}>
+              <Typography gutterBottom variant="body1" component="h6">
+                {title}
+              </Typography>
+            </Tooltip>
+            <Tooltip title={artist}>
             <Typography variant="body1" component="h6" color="textSecondary">
               {artist}
             </Typography>
+            </Tooltip>
           </CardContent>
           <CardActions>
             <IconButton size="small" color="primary" onClick={handleTogglePlay}>
