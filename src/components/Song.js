@@ -9,15 +9,10 @@ import {
   makeStyles,
   Tooltip,
 } from "@material-ui/core";
-import {
-  PlayArrow,
-  Queue,
-  Cancel,
-  Pause,
-  Check,
-  Equalizer,
-} from "@material-ui/icons";
+import { PlayArrow, Queue, Cancel, Pause, Check } from "@material-ui/icons";
 import { useMutation } from "@apollo/react-hooks";
+import UseAnimations from "react-useanimations";
+import activity from "react-useanimations/lib/activity";
 
 import { ADD_OR_REMOVE_SONG_FROM_QUEUE } from "../graphql/mutations";
 import { SongContext } from "../App";
@@ -110,7 +105,7 @@ export default function Song({ song, handleDeleteSong, queue }) {
             <div
               style={{
                 position: "absolute",
-                backgroundColor: "rgba(0,0,0,.6)",
+                backgroundColor: "rgba(0,0,0,.8)",
                 width: "100%",
                 height: 180,
               }}
@@ -118,15 +113,18 @@ export default function Song({ song, handleDeleteSong, queue }) {
               <Typography
                 style={{
                   position: "absolute",
-                  top: "25%",
+                  top: "15%",
                   left: "50%",
                   transform: "translate(-50%, 0%)",
                 }}
                 variant="h5"
-                //component="h6"
                 color="primary"
               >
-                <Equalizer style={{ fontSize: 68 }} />
+                <UseAnimations
+                  animation={activity}
+                  size={136}
+                  strokeColor="white"
+                />
               </Typography>
             </div>
           ) : null}

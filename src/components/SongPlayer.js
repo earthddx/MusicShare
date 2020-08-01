@@ -154,12 +154,12 @@ export default function SongPlayer() {
               </div>
               <Tooltip title="Repeat song">
                 <IconButton onClick={handleRepeatSong}>
-                  <RepeatOne color={repeatSong ? "primary" : "white"} />
+                  <RepeatOne color={repeatSong ? "primary" : "inherit"} />
                 </IconButton>
               </Tooltip>
               <Tooltip title={toggleVideo ? "Show Video" : "Close Video"}>
                 <IconButton onClick={handleToggleVideo}>
-                  <VideoLabel color={toggleVideo ? "white" : "primary"} />
+                  <VideoLabel color={toggleVideo ? "inherit" : "primary"} />
                 </IconButton>
               </Tooltip>
             </div>
