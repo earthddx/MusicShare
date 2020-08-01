@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import { PlayArrow, Queue, Cancel, Pause, Check } from "@material-ui/icons";
 import { useMutation } from "@apollo/react-hooks";
+import ReactPlayer from "react-player/youtube";
 
 import { ADD_OR_REMOVE_SONG_FROM_QUEUE } from "../graphql/mutations";
 import { SongContext } from "../App";
@@ -98,7 +99,33 @@ export default function Song({ song, handleDeleteSong, queue }) {
             </IconButton>
           </Tooltip>
         </div>
-        <CardMedia image={thumbnail} className={classes.thumbnail} />
+        <div style={{ width: "100%", height: "100%" }}>
+          {currSongPlaying ? (
+            <div
+              style={{
+                position: "absolute",
+                backgroundColor: "rgba(0,0,0,.4)",
+                width: "100%",
+                height: "100%",
+              }}
+            >
+              <Typography
+                style={{
+                  position: "absolute",
+                  top: "0%",
+                  right: "0%",
+                  // transform: "translate(-50%, -50%)",
+                }}
+                variant="h5"
+                //component="h6"
+                color="primary"
+              >
+                NOW PLAYING
+              </Typography>
+            </div>
+          ) : null}
+          <CardMedia image={thumbnail} className={classes.thumbnail} />
+        </div>
         <div className={classes.songInfo}>
           <CardContent className={classes.typography}>
             <Tooltip title={title}>
@@ -107,9 +134,9 @@ export default function Song({ song, handleDeleteSong, queue }) {
               </Typography>
             </Tooltip>
             <Tooltip title={artist}>
-            <Typography variant="body1" component="h6" color="textSecondary">
-              {artist}
-            </Typography>
+              <Typography variant="body1" component="h6" color="textSecondary">
+                {artist}
+              </Typography>
             </Tooltip>
           </CardContent>
           <CardActions>

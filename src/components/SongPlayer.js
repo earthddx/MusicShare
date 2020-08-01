@@ -12,6 +12,7 @@ import {
   PlayArrow,
   Pause,
   VideoLabel,
+  RepeatOne
 } from "@material-ui/icons";
 import ReactPlayer from "react-player";
 import { useQuery } from "@apollo/react-hooks";
@@ -27,6 +28,7 @@ export default function SongPlayer() {
   const { data } = useQuery(GET_QUEUED_SONGS);
   const { state, dispatch } = useContext(SongContext);
   const [volume, setVolume] = useState(1);
+  const [repeatSong, setRepeatSong] = useState(false);
   const [played, setPlayed] = useState(0);
   const [playedSeconds, setPlayedSeconds] = useState(0);
   const [isUserSeeking, setIsUserSeeking] = useState(false);
@@ -42,11 +44,11 @@ export default function SongPlayer() {
 
   useEffect(() => {
     const nextSong = data.queue[positionInQueue + 1];
-    if (played >= 0.99 && nextSong) {
+    if (played >= 0.99 && nextSong && repeatSong === false) {
       setPlayed(0);
       dispatch({ type: "SET_SONG", payload: { song: nextSong } });
     }
-  }, [data.queue, played, dispatch, positionInQueue]);
+  }, [data.queue, played, dispatch, positionInQueue, repeatSong]);
 
   const handleTogglePlay = () => {
     dispatch(state.isPlaying ? { type: "PAUSE_SONG" } : { type: "PLAY_SONG" });
@@ -97,6 +99,10 @@ export default function SongPlayer() {
     setVolume(newValue);
   };
 
+  const handleRepeatSong = () => {
+    setRepeatSong(!repeatSong);
+  };
+
   return (
     state.song.title &&
     state.song.artist && (
@@ -144,12 +150,26 @@ export default function SongPlayer() {
                 </IconButton>
                 <IconButton onClick={handlePlayNextSong}>
                   <SkipNext />
-                  &nbsp;
                 </IconButton>
               </div>
+              <Tooltip title="Repeat song">
+                <IconButton
+                  onClick={handleRepeatSong}
+                  style={
+                    repeatSong ? { backgroundColor: "rgba(0,0,0,.5)" } : null
+                  }
+                >
+                  <RepeatOne color={repeatSong ? "primary" : "white"} />
+                </IconButton>
+              </Tooltip>
               <Tooltip title={toggleVideo ? "Show Video" : "Close Video"}>
-                <IconButton onClick={handleToggleVideo}>
-                  <VideoLabel />
+                <IconButton
+                  onClick={handleToggleVideo}
+                  style={
+                    toggleVideo ? null : { backgroundColor: "rgba(0,0,0,.5)" }
+                  }
+                >
+                  <VideoLabel color={toggleVideo ? "white" : "primary"} />
                 </IconButton>
               </Tooltip>
             </div>
@@ -194,18 +214,13 @@ export default function SongPlayer() {
               style={{
                 width: "20vw",
                 height: "11.5vw",
-<<<<<<< HEAD
                 pointerEvents: "none",
-=======
-                pointerEvents:'none'
->>>>>>> 4a7a25df8bf2787d882b7a2eb6a17cfdc1c2e0c7
               }}
             >
               <ReactPlayer
                 width="100%"
                 height="100%"
-                //controls={true}
-                loop={true}
+                loop={repeatSong}
                 url={state.song.url}
                 playing={state.isPlaying}
                 volume={volume}
