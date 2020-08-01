@@ -1,4 +1,4 @@
-App created with **GraphQL(Hasura GraphiQL), Apollo** and **React**
+App created with **GraphQL(Hasura GraphiQL), Apollo** and **React**. Accepts only youtube.com urls.
 
 Styling is done by using **Material-UI**
 
