@@ -18,7 +18,6 @@ import {
   Equalizer,
 } from "@material-ui/icons";
 import { useMutation } from "@apollo/react-hooks";
-import ReactPlayer from "react-player/youtube";
 
 import { ADD_OR_REMOVE_SONG_FROM_QUEUE } from "../graphql/mutations";
 import { SongContext } from "../App";
