@@ -59,7 +59,7 @@ export default function AddSong() {
   const getYouTubeInfo = (player) => {
     const duration = player.getDuration();
     const { title, video_id, author } = player.getVideoData();
-    const thumbnail = `http://img.youtube.com/vi/${video_id}/0.jpg`;
+    const thumbnail = `https://img.youtube.com/vi/${video_id}/0.jpg`;
     return {
       duration,
       title,
