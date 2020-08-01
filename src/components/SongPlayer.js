@@ -12,7 +12,7 @@ import {
   PlayArrow,
   Pause,
   VideoLabel,
-  RepeatOne
+  RepeatOne,
 } from "@material-ui/icons";
 import ReactPlayer from "react-player";
 import { useQuery } from "@apollo/react-hooks";
@@ -153,22 +153,12 @@ export default function SongPlayer() {
                 </IconButton>
               </div>
               <Tooltip title="Repeat song">
-                <IconButton
-                  onClick={handleRepeatSong}
-                  style={
-                    repeatSong ? { backgroundColor: "rgba(0,0,0,.5)" } : null
-                  }
-                >
+                <IconButton onClick={handleRepeatSong}>
                   <RepeatOne color={repeatSong ? "primary" : "white"} />
                 </IconButton>
               </Tooltip>
               <Tooltip title={toggleVideo ? "Show Video" : "Close Video"}>
-                <IconButton
-                  onClick={handleToggleVideo}
-                  style={
-                    toggleVideo ? null : { backgroundColor: "rgba(0,0,0,.5)" }
-                  }
-                >
+                <IconButton onClick={handleToggleVideo}>
                   <VideoLabel color={toggleVideo ? "white" : "primary"} />
                 </IconButton>
               </Tooltip>
