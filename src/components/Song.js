@@ -9,7 +9,14 @@ import {
   makeStyles,
   Tooltip,
 } from "@material-ui/core";
-import { PlayArrow, Queue, Cancel, Pause, Check } from "@material-ui/icons";
+import {
+  PlayArrow,
+  Queue,
+  Cancel,
+  Pause,
+  Check,
+  Equalizer,
+} from "@material-ui/icons";
 import { useMutation } from "@apollo/react-hooks";
 import ReactPlayer from "react-player/youtube";
 
@@ -104,23 +111,23 @@ export default function Song({ song, handleDeleteSong, queue }) {
             <div
               style={{
                 position: "absolute",
-                backgroundColor: "rgba(0,0,0,.4)",
+                backgroundColor: "rgba(0,0,0,.6)",
                 width: "100%",
-                height: "100%",
+                height: 180,
               }}
             >
               <Typography
                 style={{
                   position: "absolute",
-                  top: "0%",
-                  right: "0%",
-                  // transform: "translate(-50%, -50%)",
+                  top: "25%",
+                  left: "50%",
+                  transform: "translate(-50%, 0%)",
                 }}
                 variant="h5"
                 //component="h6"
                 color="primary"
               >
-                NOW PLAYING
+                <Equalizer style={{ fontSize: 68 }} />
               </Typography>
             </div>
           ) : null}
