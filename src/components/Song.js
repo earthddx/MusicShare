@@ -101,7 +101,7 @@ export default function Song({ song, handleDeleteSong, queue }) {
           </Tooltip>
         </div>
         <div style={{ width: "100%", height: "100%" }}>
-          {currSongPlaying ? (
+          {currSongPlaying || song.id === state.song.id ? (
             <div
               style={{
                 position: "absolute",
