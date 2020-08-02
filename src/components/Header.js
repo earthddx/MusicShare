@@ -15,7 +15,7 @@ import SongPlayer from "./SongPlayer";
 const useStyles = makeStyles((theme) => ({
   songPlayer: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "flex-end",
     alignItems: "center",
     fontFamily: theme.typography.fontFamily,
     fontWeight: theme.typography.fontWeightLight,
@@ -47,9 +47,8 @@ export default function Header() {
         <Grid item md={4}>
           <AddSong />
         </Grid>
-        <Grid item md={1}></Grid>
-        <Grid item md={3} className={classes.songPlayer}>
-          <SongPlayer />
+        <Grid item md={4} className={classes.songPlayer}>
+          <SongPlayer/>
         </Grid>
       </Grid>
     </AppBar>
