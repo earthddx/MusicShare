@@ -1,4 +1,4 @@
-App created with **GraphQL(Hasura GraphiQL), Apollo** and **React**. Accepts only youtube.com urls.
+App created with **GraphQL(Hasura GraphiQL), Apollo** and **React**. Accepts youtube.com urls.
 Song queue is saved to local storage and being retrieved after page refresh.
 
 Styling is done by using **Material-UI**
