@@ -13,7 +13,7 @@ Please be aware that queries, mutations, subsciptions and data could be modified
 
 ### client.js (ApolloClient)
 
-We specify on a new property <code>resolvers: Mutation</code> object with a property <code>addOrRemoveFromQueue</code> with 3 params where the first one isn't important in this case, second one is all the arguments and the last one is <code>cache</code>. We can work now directly with cache.
+In<code>resolvers: Mutation</code> object with a property <code>addOrRemoveFromQueue</code> 3 paramateres are specified, where the first one isn't important in this case, second one is all the arguments and the last one is <code>cache</code>. It gives access to work directly with cache.
 
 We can take what is in there currently <code>queue:[]</code> and add songs. First, we read the queury of all the previous songs,
 then we check to see if we indeed have the queue and if the item is already in there <code>queue.some(song=>song.id === input.id)</code>, we want to remove it, otherwise add it <code>[...queue, input]</code>.
