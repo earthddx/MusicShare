@@ -29,4 +29,4 @@ To save queued song in to local storage:
 <code>...onCompleted: data=>{localstorage.setItem('queue', data.addOrRemoveFromQueue)}</code>
 
 
-The data is coming from  <code>addOrRemoveFromQueue</code> mutation and corresponds to <code>'queue'</code> key. In order to write the data that results in an array to local storage, we have to convert it in to a string since local storage only accepts strings.
+The data is coming from  <code>addOrRemoveFromQueue</code> mutation and corresponds to <code>'queue'</code> key. In order to write the data that results in an array to local storage, we have to convert it in to a string instead <code>JSON.stringify(data.addOrRemoveFromQueue)</code> since local storage only accepts strings.
