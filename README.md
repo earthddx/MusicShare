@@ -21,3 +21,12 @@ We can take what is in there currently <code>queue:[]</code> and add songs. Firs
 then we check to see if we indeed have the queue and if the item is already in there <code>queue.some(song=>song.id === input.id)</code>, we want to remove it, otherwise add it <code>[...queue, input]</code>.
 
 To update cache , we write back the changes <code>cache.writeQuery({...})</code> and upon success the queue is returned.
+
+
+## SongList.js
+To save queued song in to local storage:
+
+<code>...onCompleted: data=>{localstorage.setItem('queue', data.addOrRemoveFromQueue)}</code>
+
+
+The data is coming from  <code>addOrRemoveFromQueue</code> mutation and corresponds to <code>'queue'</code> key. In order to write the data that results in an array to local storage, we have to convert it in to a string since local storage only accepts strings.
