@@ -13,9 +13,6 @@ Please be aware that queries, mutations, subsciptions and data could be modified
 
 ## client.js (ApolloClient)
 
-To give data to client:
-<code>client.writeData({data}); </code>
-
 
 ### how to remove data from the queue
 We specify on a new property <code>resolvers: Mutation</code> object with a property <code>addOrRemoveFromQueue</code> with 3 params where the first one isn't important in this case, second one is all the arguments and the last one is <code>cache</code>. We can work now directly with cache.
