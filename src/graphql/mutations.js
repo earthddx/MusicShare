@@ -55,3 +55,21 @@ export const UPDATE_VIDEO = gql`
     }
   }
 `;
+
+export const ADD_NOTE = gql`
+  mutation addNote($text: String!) {
+    insert_notes_one(object: { text: $text }) {
+      id
+      text
+      created_at
+    }
+  }
+`;
+
+export const DELETE_NOTE = gql`
+  mutation deleteNote($id: uuid!) {
+    delete_notes_by_pk(id: $id) {
+      id
+    }
+  }
+`;

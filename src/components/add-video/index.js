@@ -70,7 +70,7 @@ export default function AddVideo() {
       } catch (_) {}
     }
 
-    // SoundCloud — oEmbed API
+    // SoundCloud — oEmbed API (duration is captured at playback time via onDuration)
     if (/soundcloud\.com/.test(url)) {
       try {
         const res = await fetch(

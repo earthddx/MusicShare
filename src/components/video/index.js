@@ -50,7 +50,7 @@ export default function Video({ video, handleDeleteVideo, queue, allVideos, view
   const controlsProps = {
     played,
     playedSeconds,
-    duration: video.duration,
+    duration: state.duration || video.duration,
     volume,
     isPlaying: state.isPlaying,
     repeatVideo,

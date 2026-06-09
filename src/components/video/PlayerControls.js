@@ -82,12 +82,12 @@ export default function PlayerControls({
 
         <VolumeUp sx={{ color: "white", mr: compact ? 0.5 : 1, ...(compact && { fontSize: 14 }) }} />
         <Slider
-          value={volume}
+          value={Math.sqrt(volume)}
           min={0}
           max={1}
           step={0.01}
           size={compact ? "small" : undefined}
-          onChange={(_, v) => onVolumeChange(v)}
+          onChange={(_, v) => onVolumeChange(v * v)}
           sx={{ width: compact ? 56 : 80, color: "white", "& .MuiSlider-thumb": thumbSx }}
         />
 
@@ -103,7 +103,7 @@ export default function PlayerControls({
           <>
             <Tooltip title="Playback speed">
               <IconButton size={btnSize} onClick={onSpeedChange} sx={{ ml: 0.5 }}>
-                <Typography sx={{ color: playbackRate !== 1 ? "primary.main" : "white", fontSize: 12, fontWeight: 700, lineHeight: 1 }}>
+                <Typography component="span" sx={{ display: "block", color: playbackRate !== 1 ? "primary.main" : "white", fontSize: 12, fontWeight: 700, lineHeight: 1 }}>
                   {playbackRate}×
                 </Typography>
               </IconButton>

@@ -7,7 +7,10 @@ const videoReducer = (state, action) => {
       return { ...state, isPlaying: false };
     }
     case "SET_VIDEO": {
-      return { ...state, video: action.payload.video };
+      return { ...state, video: action.payload.video, duration: 0 };
+    }
+    case "SET_DURATION": {
+      return { ...state, duration: action.payload.duration };
     }
     case "SET_PLAYED_SECONDS": {
       return { ...state, playedSeconds: action.payload.playedSeconds };

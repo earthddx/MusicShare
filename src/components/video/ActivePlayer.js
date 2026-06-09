@@ -64,6 +64,9 @@ export default function ActivePlayer({
     },
     onEnded: onVideoEnd,
     onProgress,
+    onDuration: (d) => {
+      if (d > 0) dispatch({ type: "SET_DURATION", payload: { duration: d } });
+    },
   };
 
   const audioOnly = listMode && !isVideoExpanded;

@@ -12,3 +12,13 @@ export const GET_VIDEOS = gql`
     }
   }
 `;
+
+export const GET_NOTES = gql`
+  subscription getNotes {
+    notes(order_by: { created_at: desc }) {
+      id
+      text
+      created_at
+    }
+  }
+`;

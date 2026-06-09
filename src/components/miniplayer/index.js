@@ -29,6 +29,8 @@ export default function MiniPlayer({ queue }) {
     playbackRate = 1,
   } = state;
 
+  const duration = state.duration || video.duration;
+
   const handleSpeedChange = () => {
     const speeds = [0.75, 1, 1.25, 1.5, 2];
     const next = speeds[(speeds.indexOf(playbackRate) + 1) % speeds.length];
@@ -45,7 +47,7 @@ export default function MiniPlayer({ queue }) {
 
   if (!video.id || isVideoExpanded) return null;
 
-  const played = video.duration > 0 ? playedSeconds / video.duration : 0;
+  const played = duration > 0 ? playedSeconds / duration : 0;
   const positionInQueue = queue.findIndex((v) => v.id === video.id);
   const hasPrev = positionInQueue > 0;
   const hasNext = positionInQueue >= 0 && positionInQueue < queue.length - 1;
@@ -194,20 +196,20 @@ export default function MiniPlayer({ queue }) {
             )}
           </IconButton>
           <Slider
-            value={volume}
+            value={Math.sqrt(volume)}
             min={0}
             max={1}
             step={0.01}
             size="small"
             onChange={(_, v) =>
-              dispatch({ type: "SET_VOLUME", payload: { volume: v } })
+              dispatch({ type: "SET_VOLUME", payload: { volume: v * v } })
             }
             sx={{ width: 72, "& .MuiSlider-thumb": { width: 10, height: 10 } }}
           />
           <Tooltip title="Playback speed">
             <IconButton size="small" onClick={handleSpeedChange} sx={{ width: 36 }}>
-              <Typography sx={{ fontSize: 11, fontWeight: 700, color: playbackRate !== 1 ? "primary.main" : "text.primary", lineHeight: 1 }}>
-                {playbackRate}×
+              <Typography component="span" sx={{ display: "block", fontSize: 11, fontWeight: 700, color: playbackRate !== 1 ? "primary.main" : "text.primary", lineHeight: 1 }}>
+                {playbackRate}X
               </Typography>
             </IconButton>
           </Tooltip>
@@ -223,7 +225,7 @@ export default function MiniPlayer({ queue }) {
           color="text.secondary"
           sx={{ minWidth: 34, textAlign: "right", flexShrink: 0 }}
         >
-          {formatDuration(playedSeconds, video.duration)}
+          {formatDuration(playedSeconds, duration)}
         </Typography>
 
         <Slider
@@ -250,7 +252,7 @@ export default function MiniPlayer({ queue }) {
           color="text.secondary"
           sx={{ minWidth: 34, flexShrink: 0 }}
         >
-          {formatDuration(video.duration, video.duration)}
+          {formatDuration(duration, duration)}
         </Typography>
       </Box>
     </Box>

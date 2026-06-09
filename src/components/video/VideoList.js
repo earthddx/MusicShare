@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import {
   Grid,
+  Box,
   CircularProgress,
   Dialog,
   DialogTitle,
@@ -74,7 +75,16 @@ export default function VideoList({ queue, filter = "", viewMode = "tiles" }) {
   }
 
   if (error) {
-    return <div>Error fetching videos</div>;
+    return (
+      <Box sx={{ textAlign: "center", mt: 8 }}>
+        <Typography color="text.secondary" gutterBottom>
+          Connection lost. Please reload to reconnect.
+        </Typography>
+        <Button variant="outlined" onClick={() => window.location.reload()}>
+          Reload
+        </Button>
+      </Box>
+    );
   }
 
   const handleDeleteVideo = (id) => {
